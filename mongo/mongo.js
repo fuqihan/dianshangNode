@@ -1,7 +1,13 @@
 'use strict'
 const mongoose = require('./index.js')
 // 连接mongodb
-mongoose.connect('mongodb://115.159.79.40:27017/mydemo')
+const options = {
+  db: { native_parser: true },
+  user: 'mydemo',
+  pass: '123456'
+}
+
+mongoose.connect('mongodb://115.159.79.40:12345/mydemo',options)
 // 实例化连接对象
 const db = mongoose.connection
 var Schema =  mongoose.Schema

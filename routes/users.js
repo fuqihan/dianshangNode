@@ -9,16 +9,22 @@ var multer = require('multer');
 var upload = multer({ dest: 'uploads/'}).single('file');
 
 //  注册用户信息
-router.post('/addUsers', function (req, res, next) {
-  console.log(req.body);
-  // usersModel.addUsers(abc);
-  res.json(123)
+router.post('/addUser', function (req, res, next) {
+  console.log('addUser=========')
+
+    let data = usersModel.addUser(req.body.obj);
+    res.json({
+      info: true,
+      token: auth.createToken(data.id),
+      name: req.body.obj.name
+    })
+
 });
 //  登陆信息
 router.post('/postLogin', function (req, res, next) {
   console.log(req.body)
   usersModel.postLogin(req.body).then((data) => {
-     console.log(data.id)
+    //  console.log(data.id)
       if(data) {
         res.json({
           info: true,
@@ -41,8 +47,16 @@ router.post('/checkToken', function(req, res, next) {
 
 // 判断用户名是否重复
 router.post('/nameRepeat', function (req, res, next) {
-  console.log(req.body)
-  res.json(true)
+
+  usersModel.nameRepeat(req.body.name).then((data) => {
+    console.log(data)
+    if(!data){
+        res.json(false)
+    } else {
+        res.json(true)
+    }
+  })
+
 })
 // 单文件上传
 router.post("/upload",upload,function(req,res,next){
